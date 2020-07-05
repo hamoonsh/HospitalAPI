@@ -14,16 +14,34 @@ namespace HospitalAPI.Controllers
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
+
         private readonly IHospitalRepository _hospitalRepository;
-        public WeatherForecastController(IHospitalRepository hospitalRepository)
+        private readonly IPatientRepository _patientRepository;
+        private readonly GeneralMethods _generalMethods;
+
+        public WeatherForecastController(IHospitalRepository hospitalRepository, IPatientRepository patientRepository, GeneralMethods generalMethods)
         {
             _hospitalRepository = hospitalRepository;
+            _patientRepository = patientRepository;
+            _generalMethods = generalMethods;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<Hospital>> Get()
+        public IActionResult Get()
         {
-            return await _hospitalRepository.GetHospitalsAsync();
+            return Ok(_hospitalRepository.GetHospitalsWaitTimeByLevel(Models.Enums.Level.One));
+        }
+
+        [HttpPost]
+        [Route("RegPatient")]
+        public async Task<IActionResult> RegPatient([FromBody] Patient patient)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+            if (_generalMethods.AddOrUpdate(patient) && _generalMethods.SaveChanges())
+                return Ok();
+            return StatusCode(500);
         }
     }
 }

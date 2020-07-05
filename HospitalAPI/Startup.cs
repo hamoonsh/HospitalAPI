@@ -23,6 +23,8 @@ namespace HospitalAPI
             services.AddControllers();
             services.AddDbContext<HospitalDBContext>();
             services.AddScoped<IHospitalRepository, HospitalRepository>();
+            services.AddScoped<IPatientRepository, PatientRepository>();
+            services.AddScoped<GeneralMethods>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

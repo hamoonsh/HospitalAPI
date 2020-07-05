@@ -1,25 +1,70 @@
 ﻿using HospitalAPI.Models.Entities;
+using HospitalAPI.Models.ResponseModels;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace HospitalAPI.Models.Repositories
 {
-    public class HospitalRepository : GeneralMethods, IHospitalRepository
+    public class HospitalRepository : IHospitalRepository
     {
         private HospitalDBContext _db;
 
-
-        public HospitalRepository(HospitalDBContext db) : base(db)
+        public HospitalRepository(HospitalDBContext db)
         {
-
             _db = db;
-
-
         }
+
         public async Task<IEnumerable<Hospital>> GetHospitalsAsync()
         {
             return await _db.Hospitals.ToListAsync();
+        }
+
+        public async Task<IEnumerable<GetHospitalsWaitTimeByLevelResponse>> GetHospitalsWaitTimeByLevel(Enums.Level level)
+        {
+            var response = new List<GetHospitalsWaitTimeByLevelResponse>();
+            IEnumerable<Hospital> hospitals = _db.Hospitals;
+            foreach (Hospital h in hospitals)
+            {
+                int time = 0;
+                IEnumerable<Patient> patients = _db.Patients.Where(p => p.HospitalID == h.HospitalID);
+                foreach (Patient p in patients)
+                {
+                    if (level >= p.Level)
+                    {
+                        switch (p.Level)
+                        {
+                            case Enums.Level.Zero:
+                                time += h.levelZeroVisitingTime;
+                                break;
+
+                            case Enums.Level.One:
+                                time += h.levelOneVisitingTime;
+                                break;
+
+                            case Enums.Level.Two:
+                                time += h.levelTwoVisitingTime;
+                                break;
+
+                            case Enums.Level.Three:
+                                time += h.levelThreeVisitingTime;
+                                break;
+
+                            case Enums.Level.Four:
+                                time += h.levelFourVisitingTime;
+                                break;
+                        }
+                    }
+                }
+                response.Add(new GetHospitalsWaitTimeByLevelResponse
+                {
+                    HospitalID = h.HospitalID,
+                    Name = h.Name,
+                    WaitingTime = time
+                });
+            }
+            return response;
         }
     }
 }
