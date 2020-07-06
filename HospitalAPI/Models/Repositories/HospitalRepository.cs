@@ -16,15 +16,25 @@ namespace HospitalAPI.Models.Repositories
             _db = db;
         }
 
+        /// <summary>
+        /// GetHospitalsAsync
+        /// </summary>
+        /// <returns>IEnumerable<Hospital></returns>
         public async Task<IEnumerable<Hospital>> GetHospitalsAsync()
         {
             return await _db.Hospitals.ToListAsync();
         }
 
+        /// <summary>
+        /// GetHospitalsWaitTimeByLevel
+        /// </summary>
+        /// <param name="level">defines sickness of patient</param>
+        /// <returns>IEnumerable<GetHospitalsWaitTimeByLevelResponse></returns>
         public async Task<IEnumerable<GetHospitalsWaitTimeByLevelResponse>> GetHospitalsWaitTimeByLevel(Enums.Level level)
         {
             var response = new List<GetHospitalsWaitTimeByLevelResponse>();
             IEnumerable<Hospital> hospitals = _db.Hospitals;
+            // if hospital has more than one doctor calculation would be different
             foreach (Hospital h in hospitals)
             {
                 int time = 0;
