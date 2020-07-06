@@ -1,5 +1,6 @@
 ﻿using HospitalAPI.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace HospitalAPI.Models.Repositories
 {
@@ -12,7 +13,7 @@ namespace HospitalAPI.Models.Repositories
             _db = db;
         }
 
-        public bool AddOrUpdate(object entity)
+        public async Task<bool> AddAsyncOrUpdate(object entity)
         {
             try
             {
@@ -21,7 +22,7 @@ namespace HospitalAPI.Models.Repositories
                 switch (state)
                 {
                     case EntityState.Detached:
-                        _db.Add(entity);
+                        await _db.AddAsync(entity);
                         break;
 
                     case EntityState.Modified:
@@ -42,11 +43,11 @@ namespace HospitalAPI.Models.Repositories
             }
         }
 
-        public bool SaveChanges()
+        public async Task<bool> SaveChangesAsync()
         {
             try
             {
-                if (_db.SaveChanges() > 0)
+                if (await _db.SaveChangesAsync() > 0)
                 {
                     return true;
                 }
