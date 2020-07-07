@@ -1,6 +1,9 @@
 ﻿using HospitalAPI.Models;
 using HospitalAPI.Models.Repositories;
+using HospitalAPI.Models.RequestModels;
+using HospitalAPI.Models.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace HospitalAPI.Controllers
 {
@@ -8,8 +11,6 @@ namespace HospitalAPI.Controllers
     [Route("[controller]")]
     public class HospitalController : ControllerBase
     {
-
-
         private readonly IHospitalRepository _hospitalRepository;
         private readonly IPatientRepository _patientRepository;
         private readonly GeneralMethods _generalMethods;
@@ -23,10 +24,11 @@ namespace HospitalAPI.Controllers
 
         [HttpGet]
         [Route("")]
-        public IActionResult Get([FromBody] Enums.Level level)
+        public async Task<IActionResult> Get([FromBody] GetHospitalReq req)
         {
-            return Ok(_hospitalRepository.GetHospitalsWaitTimeByLevel(level));
+            if (!ModelState.IsValid)
+                return BadRequest();
+            return Ok(new GetHospitalRes { Hospitals = await _hospitalRepository.GetHospitalsWaitTimeByLevel(req.Level) });
         }
-
     }
 }

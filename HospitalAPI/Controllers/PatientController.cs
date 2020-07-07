@@ -9,26 +9,28 @@ namespace HospitalAPI.Controllers
     [ApiController]
     public class PatientController : ControllerBase
     {
-
-
-
         private readonly IPatientRepository _patientRepository;
         private readonly GeneralMethods _generalMethods;
 
         public PatientController(IPatientRepository patientRepository, GeneralMethods generalMethods)
         {
-
             _patientRepository = patientRepository;
             _generalMethods = generalMethods;
         }
+
+        /// <summary>
+        /// RegPatient
+        /// </summary>
+        /// <param name="patient">patient model</param>
+        /// <returns></returns>
         [HttpPost]
         [Route("")]
         public async Task<IActionResult> RegPatient([FromBody] Patient patient)
         {
             // TODO
+            // Get additional data like ensurance number , personal info , etc ...
             // if (patient.MobileNumber.IsVerified)
             // {
-
             if (!ModelState.IsValid)
                 return BadRequest();
 

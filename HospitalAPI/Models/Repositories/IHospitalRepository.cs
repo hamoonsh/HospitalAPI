@@ -9,6 +9,6 @@ namespace HospitalAPI.Models.Repositories
     {
         Task<IEnumerable<Hospital>> GetHospitalsAsync();
 
-        Task<IEnumerable<GetHospitalsWaitTimeByLevelResponse>> GetHospitalsWaitTimeByLevel(Enums.Level level);
+        Task<List<GetHospitalsWaitTimeByLevelResponse>> GetHospitalsWaitTimeByLevel(Enums.Level level);
     }
 }

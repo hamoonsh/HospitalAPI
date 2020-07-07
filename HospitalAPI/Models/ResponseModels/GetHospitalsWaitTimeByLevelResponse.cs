@@ -10,5 +10,6 @@ namespace HospitalAPI.Models.ResponseModels
         public int HospitalID { get; set; }
         public string Name { get; set; }
         public int WaitingTime { get; set; }
+        public string Doctor { get; set; }
     }
 }

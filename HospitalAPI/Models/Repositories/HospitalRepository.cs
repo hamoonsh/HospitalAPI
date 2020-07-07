@@ -30,7 +30,7 @@ namespace HospitalAPI.Models.Repositories
         /// </summary>
         /// <param name="level">defines sickness of patient</param>
         /// <returns>IEnumerable<GetHospitalsWaitTimeByLevelResponse></returns>
-        public async Task<IEnumerable<GetHospitalsWaitTimeByLevelResponse>> GetHospitalsWaitTimeByLevel(Enums.Level level)
+        public async Task<List<GetHospitalsWaitTimeByLevelResponse>> GetHospitalsWaitTimeByLevel(Enums.Level level)
         {
             var response = new List<GetHospitalsWaitTimeByLevelResponse>();
             IEnumerable<Hospital> hospitals = _db.Hospitals;
@@ -67,11 +67,13 @@ namespace HospitalAPI.Models.Repositories
                         }
                     }
                 }
+                Doctor doctor = _db.Doctors.Where(p => p.DoctorID == (_db.HospitalDoctors.Where(x => x.HospitalID == h.HospitalID).FirstOrDefault().DoctorID)).FirstOrDefault();
                 response.Add(new GetHospitalsWaitTimeByLevelResponse
                 {
                     HospitalID = h.HospitalID,
                     Name = h.Name,
-                    WaitingTime = time
+                    WaitingTime = time,
+                    Doctor = doctor.Name + " " + doctor.Family
                 });
             }
             return response;
