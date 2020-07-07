@@ -24,11 +24,11 @@ namespace HospitalAPI.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> Get([FromBody] GetHospitalReq req)
+        public async Task<IActionResult> Get([FromQuery] Enums.Level level)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
-            return Ok(new GetHospitalRes { Hospitals = await _hospitalRepository.GetHospitalsWaitTimeByLevel(req.Level) });
+            return Ok(new GetHospitalRes { Hospitals = await _hospitalRepository.GetHospitalsWaitTimeByLevel(level) });
         }
     }
 }

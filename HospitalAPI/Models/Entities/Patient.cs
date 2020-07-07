@@ -34,6 +34,6 @@ namespace HospitalAPI.Models.Entities
 
         [DefaultValue(false)]
         [Required]
-        public string IsVisited { get; set; }
+        public bool IsVisited { get; set; }
     }
 }
