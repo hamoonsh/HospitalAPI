@@ -3,7 +3,7 @@ using HospitalAPI.Models.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -33,12 +33,23 @@ namespace HospitalAPI
                        .AllowAnyMethod()
                        .AllowAnyHeader();
             }));
+            services.AddApiVersioning(opt =>
+            {
+                opt.DefaultApiVersion = new ApiVersion(1, 0);
 
+                opt.ReportApiVersions = true;
+                opt.AssumeDefaultVersionWhenUnspecified = true;
+                opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
+            }
+
+
+            );
             services.AddControllers();
             services.AddDbContext<HospitalDBContext>();
             services.AddScoped<IHospitalRepository, HospitalRepository>();
             services.AddScoped<IPatientRepository, PatientRepository>();
             services.AddScoped<GeneralMethods>();
+            services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

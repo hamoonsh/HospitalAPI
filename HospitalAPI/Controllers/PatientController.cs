@@ -1,12 +1,12 @@
 ﻿using HospitalAPI.Models.Entities;
 using HospitalAPI.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using System;
 using System.Threading.Tasks;
 
 namespace HospitalAPI.Controllers
 {
+    [ApiVersion("1.0")]
     [Route("[controller]")]
     [ApiController]
     public class PatientController : ControllerBase
@@ -49,12 +49,7 @@ namespace HospitalAPI.Controllers
         {
             try
             {
-                SqlConnection con = new SqlConnection("data source=185.159.152.62;initial catalog=pmwebsit_HospitalDB;user id=pmwebsit_HospitalAdmin;password=s_J8bl87;multipleactiveresultsets=True;application name=EntityFramework&quot;");
-                con.Open();
-                string query = "TRUNCATE TABLE " + "pmwebsit_HospitalDB.Patient";
-                SqlCommand cmd = new SqlCommand(query, con);
-                cmd.ExecuteNonQuery();
-                con.Close();
+                _patientRepository.Truncate();
                 return Ok();
             }
             catch (Exception er)

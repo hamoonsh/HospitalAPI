@@ -1,25 +1,23 @@
 ﻿using HospitalAPI.Models;
 using HospitalAPI.Models.Repositories;
-using HospitalAPI.Models.RequestModels;
 using HospitalAPI.Models.ResponseModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace HospitalAPI.Controllers
 {
+    [ApiVersion("1.0")]
     [ApiController]
     [Route("[controller]")]
     public class HospitalController : ControllerBase
     {
         private readonly IHospitalRepository _hospitalRepository;
-        private readonly IPatientRepository _patientRepository;
-        private readonly GeneralMethods _generalMethods;
 
-        public HospitalController(IHospitalRepository hospitalRepository, IPatientRepository patientRepository, GeneralMethods generalMethods)
+
+        public HospitalController(IHospitalRepository hospitalRepository)
         {
             _hospitalRepository = hospitalRepository;
-            _patientRepository = patientRepository;
-            _generalMethods = generalMethods;
+
         }
 
         [HttpGet]
