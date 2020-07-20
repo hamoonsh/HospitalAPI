@@ -1,1 +1,1 @@
-https://hospitalapi.pmwebsite.ir/swagger/index.html
+https://hospitalapi.pmwebsite.ir/swagger
